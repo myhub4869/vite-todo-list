@@ -15,6 +15,8 @@ services:
     tty: true
     links:
       - mysql
+    environment:
+      - CHOKIDAR_USEPOLLING=true
 
   mysql:
     image: mysql
@@ -29,3 +31,18 @@ services:
       MYSQL_DATABASE: mysql_sample
       MYSQL_USER: phper
       MYSQL_PASSWORD: sercret
+
+  vite:
+    build:
+      context: .
+      dockerfile: ./infra/docker/httpd-php/Dockerfile
+    ports:
+      - 5173:5173
+    volumes:
+      - ./src:/var/www/html/src/
+    command: npm run dev
+    working_dir: /var/www/html/src
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - web
