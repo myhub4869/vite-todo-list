@@ -9,6 +9,9 @@ ENV TZ=Asia/Tokyo \
   COMPOSER_HOME=/composer \
   PHPREDIS_VERSION=5.3.5
 
+# Node.js version
+ENV NODE_VERSION=20.x
+
 RUN mkdir -p /usr/src/php/ext/redis
 RUN curl -L https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1
 RUN echo 'redis' >> /usr/src/php-available-exts
@@ -28,7 +31,10 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 RUN docker-php-ext-install -j$(nproc) gd
 RUN docker-php-ext-install intl pdo_mysql zip bcmath exif opcache
 RUN docker-php-ext-install pcntl
-RUN rm -rf /var/lib/apt/lists/*
+
+# Install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION} | bash -
+RUN apt-get install -y nodejs
 
 RUN locale-gen en_US.UTF-8
 RUN localedef -f UTF-8 -i en_US en_US.UTF-8
@@ -49,3 +55,7 @@ WORKDIR /var/www/html/src/
 
 # Apache Modules
 RUN a2enmod deflate expires rewrite
+
+# Verify Node.js and npm installation
+RUN node --version
+RUN npm --version

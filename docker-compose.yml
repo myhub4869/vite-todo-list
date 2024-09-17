@@ -1,5 +1,3 @@
-version: "3"
-
 volumes:
   db-store:
 
@@ -31,18 +29,3 @@ services:
       MYSQL_DATABASE: mysql_sample
       MYSQL_USER: phper
       MYSQL_PASSWORD: sercret
-
-  redis:
-    image: redis:alpine
-
-  redis-commander:
-    hostname: redis-commander
-    image: rediscommander/redis-commander:latest
-    restart: always
-    links:
-      - redis
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    ports:
-      - 6081:8081
