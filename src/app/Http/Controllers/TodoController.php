@@ -14,7 +14,7 @@ class TodoController extends Controller
     public function index(Request $request): JsonResponse
     {
         return new JsonResponse([
-            'todos' => $request->user()
+            'todos' => $request->user()->todos
         ], Response::HTTP_OK);
     }
 

@@ -30,7 +30,7 @@ const newTodo = ref('')
 const fetchTodos = async () => {
   try {
     const response = await api.get('/todos')
-    todos.value = response.data
+    todos.value = response.data.todos ?? []
   } catch (error) {
     console.error('Error fetching todos:', error)
   }
