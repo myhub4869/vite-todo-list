@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TodoStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger("user_id")->nullable(false)->comment("ユーザID");
 
             $table->string("title", 512)->nullable(false)->comment("Todoタイトル");
-            $table->boolean('completed')->default(false)->comment("完了フラグ");
+            $table->boolean('completed')->default(TodoStatus::NOT_COMPLATED->value)->comment("完了フラグ");
 
             $table->timestamps();
             $table->softDeletes();

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Todo\StoreRequest;
+use App\Models\Todo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,17 +23,15 @@ class TodoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
-    }
+        $record = new Todo();
+        $record->title = $request->input('title');
+        $request->user()->todos()->save($record);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return new JsonResponse([
+            'todos' => $request->user()->todos
+        ], Response::HTTP_OK);
     }
 
     /**

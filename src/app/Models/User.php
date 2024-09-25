@@ -17,7 +17,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
     ];
@@ -29,7 +28,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -40,8 +38,20 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
+
+    /****************
+     * リレーション定義
+     */
+    /**
+     * トラッカー
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Todo>
+     */
+    public function todos()
+    {
+        return $this->hasMany(Todo::class);
+    }
 }
+

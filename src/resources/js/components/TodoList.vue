@@ -1,17 +1,31 @@
 <template>
   <div class="todo-list">
     <!-- 追加 -->
-    <form action="" method="post" class="d-flex gap-2 w-50 mt-5 mx-auto">
-        <input type="text" name="content" placeholder="新しいタスクを入力" v-model="newTodo" class="form-control bg-body-secondary">
-        <button type="submit" @click="addTodo" class="btn btn-primary px-3">追加</button>
+    <form action="" method="post" @submit.prevent="addTodo()" class="d-flex gap-2 w-50 mt-5 mx-auto">
+      <input type="text" name="content" placeholder="新しいタスクを入力" v-model="newTodo"
+        class="form-control bg-body-secondary">
+      <button type="button" @click="addTodo()" class="btn btn-primary px-3">追加</button>
     </form>
 
-    <ul>
-      <li v-for="todo in todos" :key="todo.id" class="d-flex justify-content-between align-items-center">
-        <span class="ps-3 fs-5">{{ todo.title }}</span>
+    <ul class="mt-5 mx-auto list-unstyled" style="width: 85%;">
+      <li v-for="todo in todos" :key="todo.id" class="d-flex gap-3 border-bottom">
+
+        <!-- 内容 -->
+        <label class="flex-grow-1 d-flex align-items-center py-3 ps-4">
+          <input type="checkbox" name="content" class="form-check-input" style="min-width: 20px; min-height: 20px;">
+          <span class="ps-3 fs-5">{{ todo.title }}</span>
+        </label>
+
+        <!-- ボタン -->
         <div class="d-flex justify-content-between align-items-center gap-2 pe-3">
-          <span class="material-symbols-outlined" @click="editTodo(todo)">edit</span>
-          <span class="material-symbols-outlined" @click="deleteTodo(todo.id)">close</span>
+          <!-- 編集 -->
+          <button class="text-success p-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+          <!-- 削除 -->
+          <button class="text-danger p-1">
+            <span class="material-symbols-outlined">close</span>
+          </button>
         </div>
       </li>
     </ul>
@@ -40,12 +54,13 @@ const addTodo = async () => {
   if (newTodo.value.trim()) {
     try {
       const response = await api.post('/todos', { title: newTodo.value })
-      todos.value.push(response.data)
+      todos.value = response.data.todos ?? []
       newTodo.value = ''
     } catch (error) {
       console.error('Error adding todo:', error)
     }
   }
+  return false
 }
 
 const deleteTodo = async (id) => {

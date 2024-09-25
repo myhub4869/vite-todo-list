@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TodoStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,15 +11,15 @@ class Todo extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /****************
-     * リレーション定義
-     */
     /**
-     * トラッカー
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Todo>
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    public function todos()
+    protected function casts(): array
     {
-        return $this->hasMany(Todo::class);
+        return [
+            'completed' => TodoStatus::class,
+        ];
     }
 }
