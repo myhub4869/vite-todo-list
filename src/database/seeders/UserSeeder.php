@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 
         // テストユーザ
         User::create([
-            'email' => "test1@exmaple.com",
+            'email' => "test1@example.com",
             'password' => bcrypt("password"),
         ]);
 
