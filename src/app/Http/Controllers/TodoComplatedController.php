@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TodoResource;
 use App\Models\Todo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class TodoComplatedController extends Controller
         $todo->save();
 
         return new JsonResponse([
-            'todos' => $request->user()->todos,
+            'todos' => TodoResource::collection($request->user()->todos),
         ], Response::HTTP_OK);
     }
 }
