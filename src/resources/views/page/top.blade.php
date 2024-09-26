@@ -12,7 +12,6 @@
 
         <div>
             <todo-list></todo-list>
-            <todo-modal></todo-modal>
         </div>
     </div>
     <loading-modal></loading-modal>

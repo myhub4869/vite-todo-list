@@ -27,7 +27,7 @@
         <!-- ボタン -->
         <div class="d-flex justify-content-between align-items-center gap-2 pe-3">
           <!-- 編集 -->
-          <button class="text-success p-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <button class="text-success p-1" data-bs-toggle="modal" data-bs-target="#todoModal" @click="openModal(todo)">
             <span class="material-symbols-outlined">edit</span>
           </button>
           <!-- 削除 -->
@@ -37,6 +37,7 @@
         </div>
       </li>
     </ul>
+    <todo-modal :todo="selectedTodo" @close="closeModal" @update="updateTodo"></todo-modal>
   </div>
 </template>
 
@@ -45,9 +46,9 @@ import { ref, onMounted, getCurrentInstance } from 'vue'
 const { proxy } = getCurrentInstance()
 const api = proxy.$api
 
-
 const todos = ref([])
 const newTodo = ref('')
+const selectedTodo = ref({})
 
 const fetchTodos = async () => {
   try {
@@ -86,10 +87,24 @@ const deleteTodo = async (id) => {
   }
 }
 
-const editTodo = (todo) => {
-  // 編集機能の実装（モーダルを開くなど）
-  console.log('Edit todo:', todo)
+const openModal = (todo) => {
+  selectedTodo.value = { ...todo }
 }
+
+const closeModal = () => {
+  selectedTodo.value = null
+}
+
+const updateTodo = async (updatedTodo) => {
+  try {
+    const response = await api.put(`/todos/${updatedTodo.id}`, updatedTodo)
+    todos.value = response.data.todos ?? []
+    closeModal()
+  } catch (error) {
+    console.error('Error updating todo:', error)
+  }
+}
+
 
 onMounted(() => {
   fetchTodos()

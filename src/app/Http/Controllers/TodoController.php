@@ -38,9 +38,16 @@ class TodoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreRequest $request, Todo $todo)
     {
-        //
+        Gate::authorize('update', $todo);
+
+        $todo->title = $request->input('title');
+        $todo->save();
+
+        return new JsonResponse([
+            'todos' => $request->user()->todos
+        ], Response::HTTP_OK);
     }
 
     /**
