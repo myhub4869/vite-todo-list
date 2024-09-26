@@ -12,7 +12,15 @@
 
         <!-- 内容 -->
         <label class="flex-grow-1 d-flex align-items-center py-3 ps-4">
-          <input type="checkbox" name="content" class="form-check-input" style="min-width: 20px; min-height: 20px;">
+          <input
+            type="checkbox"
+            name="complated"
+            v-model="todo.completed"
+            true-value="1"
+            false-value="0"
+            class="form-check-input"
+            @change.prevent="checked(todo.id)"
+            style="min-width: 20px; min-height: 20px;">
           <span class="ps-3 fs-5">{{ todo.title }}</span>
         </label>
 
@@ -48,6 +56,12 @@ const fetchTodos = async () => {
   } catch (error) {
     console.error('Error fetching todos:', error)
   }
+}
+
+const checked = async (id) => {
+  const response = await api.put(`/todos/complated/${id}`, {})
+  todos.value = response.data.todos ?? []
+  return false
 }
 
 const addTodo = async () => {
