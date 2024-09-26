@@ -31,7 +31,7 @@
             <span class="material-symbols-outlined">edit</span>
           </button>
           <!-- 削除 -->
-          <button class="text-danger p-1">
+          <button type="button" class="text-danger p-1" @click="deleteTodo(todo.id)">
             <span class="material-symbols-outlined">close</span>
           </button>
         </div>
@@ -79,8 +79,8 @@ const addTodo = async () => {
 
 const deleteTodo = async (id) => {
   try {
-    await api.delete(`/todos/${id}`)
-    todos.value = todos.value.filter(todo => todo.id !== id)
+    const response = await api.delete(`/todos/${id}`)
+    todos.value = response.data.todos ?? []
   } catch (error) {
     console.error('Error deleting todo:', error)
   }

@@ -7,6 +7,7 @@ use App\Models\Todo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class TodoController extends Controller
 {
@@ -45,8 +46,14 @@ class TodoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, Todo $todo)
     {
-        //
+        Gate::authorize('delete', $todo);
+
+        $todo->delete();
+
+        return new JsonResponse([
+            'todos' => $request->user()->todos,
+        ], Response::HTTP_OK);
     }
 }
